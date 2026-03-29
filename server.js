@@ -1,31 +1,34 @@
+// server.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 3000;
-const DB_URI = 'mongodb://localhost:27017/school-os-system'; // Update with your MongoDB URI
 
-// Middleware configuration
+// Middleware Configuration
+app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-// MongoDB connection
-gmongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('MongoDB connected successfully');
-    })
-    .catch(err => {
-        console.error('MongoDB connection error:', err);
-    });
+// MongoDB Connection
+const mongoURI = 'your_mongoDB_uri_here';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-// API route initialization
-app.get('/', (req, res) => {
-    res.send('Welcome to the School OS System API');
+// API Routes
+app.get('/api/test', (req, res) => {
+    res.send('Test API is working');
 });
 
-// TODO: Add other routes here
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
 
-// Start the serverapp.listen(PORT, () => {
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
